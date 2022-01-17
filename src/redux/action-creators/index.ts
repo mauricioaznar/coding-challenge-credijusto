@@ -1,0 +1,2 @@
+export {setCurrentUser} from './auth'
+
