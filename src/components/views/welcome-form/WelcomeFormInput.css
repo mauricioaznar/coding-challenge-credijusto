@@ -1,0 +1,11 @@
+.welcome-form-input_wrapper {
+    display: flex;
+    flex-direction: column-reverse;
+}
+.welcome-form-input_input {
+    width: 13rem;
+}
+
+.welcome-form-input_label {
+    font-size: .8rem
+}

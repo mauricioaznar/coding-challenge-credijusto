@@ -46,14 +46,14 @@ describe('Crypto comparator', function () {
     it('renders coin exchange names (eth, btc, xrp)', async () => {
         render(<CryptoComparator/>, {initialState: defaultStoreState})
         await waitForElementToBeRemoved(() => screen.queryByText(/Loading/i))
-        const links = await screen.findAllByRole('link')
+        const links = await screen.findAllByRole('button')
         expect(links).toHaveLength(3)
     })
 
     it('changes currency information when link is clicked', async () => {
         render(<CryptoComparator/>, {initialState: defaultStoreState})
         await waitForElementToBeRemoved(() => screen.queryByText(/Loading/i))
-        const ethLink = await screen.findAllByRole('link') as HTMLLinkElement[]
+        const ethLink = await screen.findAllByRole('button') as HTMLLinkElement[]
         fireEvent.click(ethLink[1])
         const textValue = ethLink[1].innerHTML
         const ethElements = await screen.findAllByText(textValue.toLocaleUpperCase())

@@ -1,17 +1,19 @@
 import React, {FormEvent, useState} from 'react'
+import './WelcomeForm.css'
 import {useTypedSelector} from "../../hooks/redux-hooks/useTypedSelector";
 import {useActions} from "../../hooks/redux-hooks/useActions";
+import WelcomeFormInput from "./welcome-form/WelcomeFormInput";
 
 
-export default function WelcomeForm () {
+export default function WelcomeForm() {
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [email, setEmail] = useState('')
     const [telephone, setTelephone] = useState('')
 
-    const { currentUser } = useTypedSelector((state) => state.auth);
+    const {currentUser} = useTypedSelector((state) => state.auth);
 
-    const { setCurrentUser } = useActions();
+    const {setCurrentUser} = useActions();
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -25,59 +27,60 @@ export default function WelcomeForm () {
     }
 
     return (
-        <form onSubmit={handleSubmit} data-testid={'welcome-form-form'}>
-            <h1>
-                Welcome!
-            </h1>
-            <div>
-                <input
-                    type={'text'}
-                    data-testid={'welcome-form-first-name'}
-                    value={firstName}
-                    required
-                    onChange={(e) => setFirstName(e.target.value)}
-                />
-                <input
-                    type={'text'}
-                    data-testid={'welcome-form-last-name'}
-                    value={lastName}
-                    required
-                    onChange={(e) => setLastName(e.target.value)}
-                />
-            </div>
-            <div>
-                <input
-                    type={'email'}
-                    data-testid={'welcome-form-email'}
+        <div className={'welcome-form'}>
+            <form
+                onSubmit={handleSubmit}
+                data-testid={'welcome-form_form'}
+                className={'welcome-form_form p-5'}
+            >
+                <h1>
+                    Welcome!
+                </h1>
+                <hr/>
+                <div className={'d-flex'}>
+                    <WelcomeFormInput
+                        className={'mr-4'}
+                        label={'First name'}
+                        value={firstName}
+                        onChange={setFirstName}
+                        id={'welcome-form-first-name'}
+                    />
+                    <WelcomeFormInput
+                        label={'Last name'}
+                        value={lastName}
+                        onChange={setLastName}
+                        id={'welcome-form-last-name'}
+                    />
+                </div>
+                <WelcomeFormInput
+                    label={'Email'}
                     value={email}
-                    required
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={setEmail}
+                    id={'welcome-form-email'}
                 />
-            </div>
-            <div>
-                <input
-                    type={'tel'}
-                    data-testid={'welcome-form-telephone'}
+                <WelcomeFormInput
+                    label={'Telephone'}
                     value={telephone}
-                    required
-                    onChange={(e) => setTelephone(e.target.value)}
+                    onChange={setTelephone}
+                    id={'welcome-form-telephone'}
                 />
-            </div>
-            <div>
-                <button
-                    type={'submit'}
-                    data-testid={'welcome-form-submit-button'}
-                >
-                    Submit
-                </button>
-            </div>
-            {
-                currentUser !== null
-                    ? <div>
-                        Thank you for signing up, { currentUser.firstName }
-                    </div>
-                    : null
-            }
-        </form>
+                <div className={'d-flex justify-center mb-4'}>
+                    <button
+                        type={'submit'}
+                        data-testid={'welcome-form-submit-button'}
+                    >
+                        Submit
+                    </button>
+                </div>
+                {
+                    currentUser !== null
+                        ? <div>
+                            Thank you for signing up, {currentUser.firstName}
+                        </div>
+                        : null
+                }
+            </form>
+        </div>
+
     )
 }

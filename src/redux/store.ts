@@ -19,6 +19,12 @@ const temporaryDefaultState: RootState = {
     }
 }
 
+const defaultState: RootState = {
+    auth: {
+        currentUser: null
+    }
+}
+
 export const store = createStore(
   rootReducer,
   temporaryDefaultState,

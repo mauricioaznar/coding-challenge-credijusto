@@ -1,0 +1,16 @@
+.welcome-form {
+    height: 100vh;
+    position: relative;
+}
+
+.welcome-form_form {
+    max-width: 50rem;
+    border-radius: .2rem;
+    box-shadow: 0 8px 6px -6px black;
+    background-color: #1E88E5;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+

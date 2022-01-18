@@ -9,48 +9,47 @@ import {RatesWithDate} from "../../types/rates-with-date";
 import CryptoConverter from "./crypto-comparator/CryptoConverter";
 import {Rates} from "../../types/rates";
 
+const COUNTDOWN = 15
+
 export default function CryptoComparator() {
     const isMounted = useRef(false);
 
     const {currentUser} = useTypedSelector((state) => state.auth);
-    const [currentCount, setCount] = useState(15);
+    const [count, setCount] = useState(COUNTDOWN);
 
     const [coinGeckoRates, setCoinGeckoRates] = useState<Array<RatesWithDate>>([])
     const [cryptoCompareRates, setCryptoCompareRates] = useState<Array<RatesWithDate>>([])
 
-    const links: (keyof Rates)[] = ['eth', 'btc', 'xrp']
-
-    const [selectedLink, setSelectedLink] = useState(links[0])
+    const buttons: (keyof Rates)[] = ['eth', 'btc', 'xrp']
+    const [selectedButton, setSelectedButton] = useState(buttons[0])
 
     const [error, setError] = useState(false)
 
 
     const getCryptoRates = () => {
-        axios.get(`${BASE_CRYPTO_COMPARE_URL}?fsyms=BTC%2CETH%2CXRP&tsyms=MXN`)
-            .then(cryptoCompareResponse => {
+
+        Promise.all([
+            axios.get(`${BASE_CRYPTO_COMPARE_URL}?fsyms=BTC%2CETH%2CXRP&tsyms=MXN`),
+            axios.get(`${BASE_COIN_GECKO_URL}?vs_currency=mxn&ids=bitcoin%2Cethereum%2Cripple`)
+        ])
+            .then(response => {
                 if (isMounted.current) {
+                    const [
+                        cryptoCompareResponse,
+                        coinGeckoResponse
+                    ] = response
+
                     const cryptoCompareRate = parseCryptoCompare(cryptoCompareResponse)
-
                     setCryptoCompareRates([cryptoCompareRate, ...cryptoCompareRates])
-                }
-            })
-            .catch(e => {
-                setError(true)
-            })
-
-
-        axios.get(`${BASE_COIN_GECKO_URL}?vs_currency=mxn&ids=bitcoin%2Cethereum%2Cripple`)
-            .then(coinGeckoResponse => {
-                if (isMounted.current) {
                     const coinGeckoRate = parseCoinGecko(coinGeckoResponse)
-
-
                     setCoinGeckoRates([coinGeckoRate, ...coinGeckoRates])
-
                 }
+
             })
-            .catch(e => {
-                setError(true)
+            .catch(_ => {
+                if (isMounted.current) {
+                    setError(true)
+                }
             })
     }
 
@@ -61,19 +60,19 @@ export default function CryptoComparator() {
             return () => {
                 isMounted.current = false
             }
-        }, [])
+        }, [isMounted])
 
     useEffect(
         () => {
-            if (currentCount <= 0) {
+            if (count <= 0) {
                 getCryptoRates()
-                setCount(15)
+                setCount(COUNTDOWN)
             }
             const timeout = setTimeout(() => {
-                setCount(currentCount - 1)
+                setCount(count - 1)
             }, 1000)
             return () => clearTimeout(timeout);
-        }, [currentCount])
+        }, [count])
 
 
     const isLoading = coinGeckoRates.length === 0
@@ -86,17 +85,16 @@ export default function CryptoComparator() {
                 </h2>
 
                 {
-                    links.map(l => {
+                    buttons.map(l => {
                         return (
-                            <a
+                            <button
                                 key={l}
-                                href={'#'}
                                 onClick={() => {
-                                    setSelectedLink(l)
+                                    setSelectedButton(l)
                                 }}
                             >
                                 { l }
-                            </a>
+                            </button>
                         )
                     })
                 }
@@ -105,7 +103,7 @@ export default function CryptoComparator() {
                 </span>
             </nav>
             <div>
-                {currentCount}
+                {count}
             </div>
 
             <div>
@@ -113,8 +111,8 @@ export default function CryptoComparator() {
                     isLoading
                         ? <div>Loading...</div>
                         : <>
-                            <CryptoRates rates={coinGeckoRates} name={'Coin gecko'} currentCrypto={selectedLink}/>
-                            <CryptoRates rates={cryptoCompareRates} name={'Crypto compare'} currentCrypto={selectedLink}/>
+                            <CryptoRates rates={coinGeckoRates} name={'Coin gecko'} currentCrypto={selectedButton}/>
+                            <CryptoRates rates={cryptoCompareRates} name={'Crypto compare'} currentCrypto={selectedButton}/>
                         </>
                 }
             </div>
@@ -122,11 +120,11 @@ export default function CryptoComparator() {
 
                 exchangesUpdates={[
                     {
-                        rate: coinGeckoRates[0]?.[selectedLink],
+                        rate: coinGeckoRates[0]?.[selectedButton],
                         exchangeName: 'Coin gecko'
                     },
                     {
-                        rate: cryptoCompareRates[0]?.[selectedLink],
+                        rate: cryptoCompareRates[0]?.[selectedButton],
                         exchangeName: 'Crypto compare'
                     }
                 ]}
