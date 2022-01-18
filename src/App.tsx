@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import './App.css';
 import WelcomeForm from "./components/views/WelcomeForm";
-import {Link, Redirect, Route, Switch, useHistory} from "react-router-dom";
+import {Redirect, Route, Switch, useHistory} from "react-router-dom";
 import {useTypedSelector} from "./hooks/redux-hooks/useTypedSelector";
 import CryptoComparator from "./components/views/CryptoComparator";
 
@@ -19,18 +19,23 @@ function App() {
                 clearTimeout(timeout)
             }
         }
-    }, [currentUser])
+    }, [currentUser, history])
 
     return (
         <div className="app">
             <Switch>
-                <Route
-                    path={'/welcome'}
-                    render={() => {
-                        return <WelcomeForm/>
-                    }}
-                    exact={true}
-                />
+                {
+                    currentUser === null
+                        ? <Route
+                            path={'/welcome'}
+                            render={() => {
+                                return <WelcomeForm/>
+                            }}
+                            exact={true}
+                        />
+                        : null
+                }
+
                 {
                     currentUser !== null ?
                         <Route

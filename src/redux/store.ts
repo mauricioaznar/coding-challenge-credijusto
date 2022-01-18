@@ -8,16 +8,18 @@ export { rootReducer }
 
 export const middlewares = [thunk]
 
-const temporaryDefaultState: RootState = {
-    auth: {
-        currentUser: {
-            firstName: "maria",
-            lastName: "perez",
-            email: "maria@perez.com",
-            telephone: "999999999"
-        }
-    }
-}
+// used for testing
+
+// const temporaryDefaultState: RootState = {
+//     auth: {
+//         currentUser: {
+//             firstName: "maria",
+//             lastName: "perez",
+//             email: "maria@perez.com",
+//             telephone: "999999999"
+//         }
+//     }
+// }
 
 const defaultState: RootState = {
     auth: {
@@ -27,7 +29,7 @@ const defaultState: RootState = {
 
 export const store = createStore(
   rootReducer,
-  temporaryDefaultState,
+  defaultState,
   composeWithDevTools(applyMiddleware(...middlewares))
 );
 
