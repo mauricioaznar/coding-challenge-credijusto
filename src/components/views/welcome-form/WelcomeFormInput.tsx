@@ -8,6 +8,7 @@ interface WelcomeFormInputProps {
     id: string;
     label: string;
     className?: string;
+    type?: 'text' | 'telephone' | 'email';
 }
 
 export default function WelcomeFormInput (props: WelcomeFormInputProps) {
@@ -17,6 +18,7 @@ export default function WelcomeFormInput (props: WelcomeFormInputProps) {
         id,
         label,
         className,
+        type = 'text'
     }
         = props
 
@@ -31,7 +33,7 @@ export default function WelcomeFormInput (props: WelcomeFormInputProps) {
             </label>
             <input
                 className={'welcome-form-input_input'}
-                type={'text'}
+                type={type}
                 data-testid={id}
                 id={id}
                 value={value}

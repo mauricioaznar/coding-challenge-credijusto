@@ -54,6 +54,7 @@ export default function WelcomeForm() {
                 </div>
                 <WelcomeFormInput
                     label={'Email'}
+                    type={'email'}
                     value={email}
                     onChange={setEmail}
                     id={'welcome-form-email'}
@@ -61,6 +62,7 @@ export default function WelcomeForm() {
                 <WelcomeFormInput
                     label={'Telephone'}
                     value={telephone}
+                    type={'telephone'}
                     onChange={setTelephone}
                     id={'welcome-form-telephone'}
                 />
