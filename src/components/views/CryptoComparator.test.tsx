@@ -25,7 +25,6 @@ describe('Crypto comparator', function () {
         await waitForElementToBeRemoved(() => screen.queryByText(/Loading/i))
         const title = await screen.findByText(/Crypto comparator/i);
         expect(title).toBeInTheDocument();
-
     })
 
     it('renders navbar with user first-name', async () => {
@@ -33,12 +32,9 @@ describe('Crypto comparator', function () {
         await waitForElementToBeRemoved(() => screen.queryByText(/Loading/i))
         const firstNameElement = await screen.findByText(/maria perez/i)
         expect(firstNameElement).toBeInTheDocument()
-
     })
 
-
     it('renders two list item (crypto compare & coin gecko) at the beginning of the render', async () => {
-
         render(<CryptoComparator/>, {initialState: defaultStoreState})
         await waitForElementToBeRemoved(() => screen.queryByText(/Loading/i))
         const listitems = await screen.findAllByRole('listitem')
