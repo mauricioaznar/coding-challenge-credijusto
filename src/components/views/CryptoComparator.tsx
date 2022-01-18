@@ -62,6 +62,7 @@ export default function CryptoComparator() {
             return () => {
                 isMounted.current = false
             }
+            // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [isMounted])
 
     useEffect(
@@ -74,6 +75,7 @@ export default function CryptoComparator() {
                 setCount(count - 1)
             }, 1000)
             return () => clearTimeout(timeout);
+            // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [count])
 
 
