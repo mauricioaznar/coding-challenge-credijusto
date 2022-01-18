@@ -5,5 +5,8 @@ export const formatNumber = (x: number | any, digits = 2) => {
     if (isNaN(x) || x === '') {
         return '-'
     }
-    return x.toFixed(digits).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    return x
+        .toFixed(digits)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 }
