@@ -67,6 +67,7 @@ export default function WelcomeForm() {
                 <div className={'d-flex justify-center mb-4'}>
                     <button
                         type={'submit'}
+                        className={'button'}
                         data-testid={'welcome-form-submit-button'}
                     >
                         Submit

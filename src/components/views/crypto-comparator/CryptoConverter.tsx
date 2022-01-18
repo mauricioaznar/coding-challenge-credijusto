@@ -1,4 +1,6 @@
 import React, {useState} from "react";
+import './CryptoConverter.css'
+
 
 interface CryptoConverterProps {
     exchangesUpdates: {
@@ -18,7 +20,7 @@ export default function CryptoConverter (props: CryptoConverterProps)  {
         let valueNumber = Number(value)
 
         if (rate !== undefined && !isNaN(valueNumber)) {
-            return (valueNumber / rate).toFixed(2)
+            return (valueNumber / rate).toFixed(6)
         }
 
 
@@ -27,20 +29,31 @@ export default function CryptoConverter (props: CryptoConverterProps)  {
 
 
     return (
-        <div>
-            <input
-                type={'number'}
-                data-testid={'crypto-converter-input'}
-                required
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-            />
+        <div className={'crypto-converter d-flex pl-4 pr-4'}>
+            <div className={'crypto-converter_input d-flex align-center'}>
+                <label htmlFor={'crypto-converter-input'} className={'mr-2'}>
+                    MXN
+                </label>
+                <div>
+                    <input
+                        type={'number'}
+                        data-testid={'crypto-converter-input'}
+                        id={'crypto-converter-input'}
+                        required
+                        value={value}
+                        onChange={(e) => setValue(e.target.value)}
+                    />
+                    <p className={'font-small'}>
+                        hint: try with a big number. EX: 4,000
+                    </p>
+                </div>
+            </div>
             {
                 exchangesUpdates.map(eu => {
                     return (
-                        <div key={eu.exchangeName}>
+                        <div key={eu.exchangeName} className={'ml-5'}>
                             <span>{ eu.exchangeName }</span>
-                            <p>
+                            <p className={'font-bold'}>
                                 {
                                     getConversion(eu.rate, value)
                                 }

@@ -1,3 +1,5 @@
+import React from 'react'
+import './CryptoComparator.css'
 import {useTypedSelector} from "../../hooks/redux-hooks/useTypedSelector";
 import {useEffect, useRef, useState} from "react";
 import axios from "axios";
@@ -78,43 +80,62 @@ export default function CryptoComparator() {
     const isLoading = coinGeckoRates.length === 0
 
 
-    return <div>
-            <nav>
-                <h2>
-                    Crypto comparator
-                </h2>
-
-                {
-                    buttons.map(l => {
-                        return (
-                            <button
-                                key={l}
-                                onClick={() => {
-                                    setSelectedButton(l)
-                                }}
-                            >
-                                { l }
-                            </button>
-                        )
-                    })
-                }
-                <span>
-                    {`${currentUser?.firstName} ${currentUser?.lastName}`}
-                </span>
-            </nav>
-            <div>
-                {count}
+    return  error
+        ? <div className={'crypto-comparator_error m-5'}>
+                Something went wrong!
             </div>
+        : isLoading
+            ? <div className={'crypto-comparator_loading m-5'}>Loading...</div>
+        : <div className={'crypto-comparator'}>
+            <nav className={'crypto-comparator_nav d-flex align-center justify-space-around'}>
 
-            <div>
-                {
-                    isLoading
-                        ? <div>Loading...</div>
-                        : <>
-                            <CryptoRates rates={coinGeckoRates} name={'Coin gecko'} currentCrypto={selectedButton}/>
-                            <CryptoRates rates={cryptoCompareRates} name={'Crypto compare'} currentCrypto={selectedButton}/>
-                        </>
-                }
+
+                <div className={'d-flex column justify-center align-center'}>
+                    <h2 className={'crypto-comparator_nav-title m-2'}>
+                        Crypto comparator
+                    </h2>
+                    <div className={'mb-4'}>
+                        {
+                            buttons.map(btn => {
+                                return (
+                                    <button
+                                        className={`crypto-comparator_nav-button button ml-2 ${btn === selectedButton ? 'button--active' : ''}`}
+                                        key={btn}
+                                        onClick={() => {
+                                            setSelectedButton(btn)
+                                        }}
+                                    >
+                                        { btn }
+                                    </button>
+                                )
+                            })
+                        }
+                    </div>
+                </div>
+                <h4
+                    className={'crypto-comparator_nav-user'}
+                >
+                    {`${currentUser?.firstName} ${currentUser?.lastName}`}
+                </h4>
+
+                <div className={'crypto-comparator_nav-counter'}>
+                   Next update: {count}s
+                </div>
+            </nav>
+
+            <div className={'d-flex m-5'}>
+
+                <CryptoRates
+                    rates={coinGeckoRates}
+                    name={'Coin gecko'}
+                    currentCrypto={selectedButton}
+                />
+                <CryptoRates
+                    className={'ml-5'}
+                    rates={cryptoCompareRates}
+                    name={'Crypto compare'}
+                    currentCrypto={selectedButton}
+                />
             </div>
             <CryptoConverter
 
@@ -130,13 +151,6 @@ export default function CryptoComparator() {
                 ]}
 
             />
-            {
-                error ?
-                    <div>
-                        Something went wrong!
-                    </div>
-                    : null
-            }
         </div>
 
 }

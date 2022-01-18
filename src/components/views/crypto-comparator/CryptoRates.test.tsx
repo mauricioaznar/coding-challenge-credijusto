@@ -21,7 +21,7 @@ describe('Crypto rates', function () {
             rates={[]}
             currentCrypto={'eth'}
         />)
-        const title = await screen.findByText('ETH');
+        const title = await screen.findByText(/ETH/i);
         expect(title).toBeInTheDocument();
     })
 
