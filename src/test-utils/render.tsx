@@ -3,9 +3,10 @@ import {rootReducer, RootState} from "../redux/reducers";
 import {Provider} from "react-redux";
 import {applyMiddleware, createStore} from "redux";
 import {middlewares} from "../redux/store";
+import {BrowserRouter} from "react-router-dom";
 
 interface ExtendedRenderOptions extends RenderOptions {
-    initialState: RootState
+    initialState: Partial<RootState>
 }
 
 export const render = (
@@ -14,12 +15,8 @@ export const render = (
         initialState,
         ...renderOptions
     }: ExtendedRenderOptions = {
-        initialState: {
-            auth: {
-                currentUser: null
-            }
-        },
-    },
+        initialState: {},
+    }
 ) => {
     const store = createStore(rootReducer, initialState, applyMiddleware(...middlewares))
 
@@ -30,7 +27,7 @@ export const render = (
 }
 
 const AppTestWrapper = (store: any) => ({
-                                           children,
-                                       }: {
+                                            children,
+                                        }: {
     children?: React.ReactNode
-}) => <Provider store={store}>{children}</Provider>
+}) => <BrowserRouter><Provider store={store}>{children}</Provider></BrowserRouter>

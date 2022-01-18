@@ -1,6 +1,6 @@
 import React, {FormEvent, useState} from 'react'
-import {useTypedSelector} from "../hooks/redux-hooks/useTypedSelector";
-import {useActions} from "../hooks/redux-hooks/useActions";
+import {useTypedSelector} from "../../hooks/redux-hooks/useTypedSelector";
+import {useActions} from "../../hooks/redux-hooks/useActions";
 
 
 export default function WelcomeForm () {

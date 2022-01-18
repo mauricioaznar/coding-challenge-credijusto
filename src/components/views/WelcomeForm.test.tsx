@@ -1,13 +1,13 @@
 import {screen, fireEvent} from "@testing-library/react";
 import React from "react";
 import WelcomeForm from "./WelcomeForm";
-import {render} from "../test-utils/render";
+import {render} from "../../test-utils/render";
 
 describe('Welcome form', () => {
     it('renders welcome page', () => {
         render(<WelcomeForm />);
-        const linkElement = screen.getByText(/Welcome/i);
-        expect(linkElement).toBeInTheDocument();
+        const welcomeMessage = screen.getByText(/Welcome/i);
+        expect(welcomeMessage).toBeInTheDocument();
     });
 
     it('renders first-name input', () => {
@@ -86,6 +86,23 @@ describe('Welcome form', () => {
         fireEvent.click(submitButton)
 
         expect(screen.getByText("Thank you for signing up, firstname")).toBeInTheDocument()
+    })
+
+    it('renders message if user already has submitted', () => {
+        render(<WelcomeForm />, {
+            initialState: {
+                auth: {
+                    currentUser: {
+                        firstName: "mandy",
+                        lastName: "pandy",
+                        email: "email@example.com",
+                        telephone: "20303030"
+                    }
+                }
+            }
+        })
+
+        expect(screen.getByText("Thank you for signing up, mandy")).toBeInTheDocument()
     })
 })
 
