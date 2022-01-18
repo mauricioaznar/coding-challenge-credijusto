@@ -1,6 +1,6 @@
 import {ActionType} from "../action-types";
 import {Action} from "../actions";
-import {User} from "../../models/user";
+import {User} from "../../types/user";
 
 interface AuthState {
   currentUser: User | null;

@@ -1,9 +1,10 @@
 import {useTypedSelector} from "../../hooks/redux-hooks/useTypedSelector";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {parseCryptoCompare} from "../../helpers/parse-crypto-compare";
-import {Rates} from "../../models/rates";
+import {Rates} from "../../types/rates";
 import {parseCoinGecko} from "../../helpers/parse-coin-gecko";
+import {BASE_COIN_GECKO_URL, BASE_CRYPTO_COMPARE_URL} from "../../helpers/constants";
+import {parseCryptoCompare} from "../../helpers/parse-crypto-compare";
 
 export default function CryptoComparator() {
     const {currentUser} = useTypedSelector((state) => state.auth);
@@ -17,14 +18,11 @@ export default function CryptoComparator() {
 
     const getCryptoRates = async () => {
         try {
-            const responses = await Promise.all(
-                [
-                    axios.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin%2Cethereum%2Cripple'),
-                    axios.get('https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC%2CETH%2CXRP&tsyms=USD')
-                ]
-            )
-            const coinGeckoRate = parseCoinGecko(responses[0])
-            const cryptoCompareRate = parseCryptoCompare(responses[1])
+            const coinGeckoResponse = await axios.get(`${BASE_COIN_GECKO_URL}?vs_currency=usd&ids=bitcoin%2Cethereum%2Cripple`)
+            const cryptoCompareResponse = await axios.get(`${BASE_CRYPTO_COMPARE_URL}?fsyms=BTC%2CETH%2CXRP&tsyms=USD`)
+
+            const coinGeckoRate = parseCoinGecko(coinGeckoResponse)
+            const cryptoCompareRate = parseCryptoCompare(cryptoCompareResponse)
 
             setCoinGeckoRates([...coinGeckoRates, coinGeckoRate])
             setCryptoCompareRates([...cryptoCompareRates, cryptoCompareRate])
@@ -53,6 +51,8 @@ export default function CryptoComparator() {
 
 
 
+    const isLoading = coinGeckoRates.length === 0
+
 
     return (
         <div>
@@ -69,19 +69,23 @@ export default function CryptoComparator() {
             </div>
 
             <div>
-                <ul>
-                    {
-                        coinGeckoRates.map((r, index) => {
-                            return (
-                                <li>
-                                    {
-                                        r.eth
-                                    }
-                                </li>
-                            )
-                        })
-                    }
-                </ul>
+                {
+                        isLoading
+                        ? <div>Loading</div>
+                        : <ul>
+                                {
+                                    coinGeckoRates.map((r, index) => {
+                                        return (
+                                            <li key={index}>
+                                                {
+                                                    r.eth
+                                                }
+                                            </li>
+                                        )
+                                    })
+                                }
+                            </ul>
+                }
             </div>
 
         </div>

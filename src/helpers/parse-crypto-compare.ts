@@ -1,4 +1,4 @@
-import {Rates} from "../models/rates";
+import {Rates} from "../types/rates";
 
 export function parseCryptoCompare(cryptoCompareResponse: { data: any }): Rates {
     return {
