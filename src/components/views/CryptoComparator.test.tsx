@@ -1,9 +1,11 @@
-import {act, findAllByRole, screen, waitFor, waitForElementToBeRemoved} from "@testing-library/react";
+import {fireEvent, screen, waitFor, waitForElementToBeRemoved} from "@testing-library/react";
 import React from "react";
 import CryptoComparator from "./CryptoComparator";
 import {render} from "../../test-utils/render";
 import {RootState} from "../../redux/reducers";
 import {wait} from "@testing-library/user-event/dist/utils";
+import {act} from "react-dom/test-utils";
+import {coinGeckoException, server} from "../../test-utils/server";
 
 const defaultStoreState: RootState = {
     auth: {
@@ -19,30 +21,51 @@ const defaultStoreState: RootState = {
 
 describe('Crypto comparator', function () {
     it('renders title', async () => {
-        render(<CryptoComparator />, { initialState: defaultStoreState })
+        render(<CryptoComparator/>, {initialState: defaultStoreState})
+        const title = await screen.findByText(/Crypto comparator/i);
+        expect(title).toBeInTheDocument();
         await waitForElementToBeRemoved(() => screen.queryByText(/Loading/i))
-        const list = await screen.findByRole('list');
-        expect(list).toBeInTheDocument();
     })
 
     it('renders navbar with user first-name', async () => {
-        render(<CryptoComparator />, { initialState: defaultStoreState })
-        const nav = await waitFor(() => screen.findByRole('navigation'));
-        expect(nav).toHaveTextContent(/maria perez/i)
+        render(<CryptoComparator/>, {initialState: defaultStoreState})
         await waitForElementToBeRemoved(() => screen.queryByText(/Loading/i))
+        const firstNameElement = await screen.findByText(/maria perez/i)
+        expect(firstNameElement).toBeInTheDocument()
+
     })
 
 
-    it('renders one list item at the beginning of the render', async () => {
-        render(<CryptoComparator />, { initialState: defaultStoreState })
+    it('renders two list item (crypto compare & coin gecko) at the beginning of the render', async () => {
+        render(<CryptoComparator/>, {initialState: defaultStoreState})
+        await waitForElementToBeRemoved(() => screen.queryByText(/Loading/i))
         const listitems = await screen.findAllByRole('listitem')
-        expect(listitems).toHaveLength(1)
+        expect(listitems).toHaveLength(2)
     })
 
-    it('renders 2 list items after 15 seconds', async () => {
-        render(<CryptoComparator />, { initialState: defaultStoreState })
-        let listitems = await screen.findAllByRole('listitem')
-        expect(listitems).toHaveLength(1)
+    it('renders coin exchange names (eth, btc, xrp)', async () => {
+        render(<CryptoComparator/>, {initialState: defaultStoreState})
+        await waitForElementToBeRemoved(() => screen.queryByText(/Loading/i))
+        const links = await screen.findAllByRole('link')
+        expect(links).toHaveLength(3)
+    })
+
+    it('changes currency information when link is clicked', async () => {
+        render(<CryptoComparator/>, {initialState: defaultStoreState})
+        await waitForElementToBeRemoved(() => screen.queryByText(/Loading/i))
+        const ethLink = await screen.findAllByRole('link') as HTMLLinkElement[]
+        fireEvent.click(ethLink[1])
+        const textValue = ethLink[1].innerHTML
+        const ethElements = await screen.findAllByText(textValue.toLocaleUpperCase())
+        expect(ethElements.length).toBeGreaterThan(1)
+    })
+
+    it('displays error message when something has failed', async () => {
+        server.use(coinGeckoException)
+        render(<CryptoComparator/>, {initialState: defaultStoreState})
+        const errorElement = await screen.findByText(/Something went wrong/i)
+        expect(errorElement).toBeInTheDocument()
+
     })
 
 });

@@ -1,9 +1,14 @@
-import {Rates} from "../types/rates";
+import {RatesWithDate} from "../types/rates-with-date";
+import {getFormattedDateTime} from "./date-format";
 
-export function parseCryptoCompare(cryptoCompareResponse: { data: any }): Rates {
+export function parseCryptoCompare(cryptoCompareResponse: { data: any }): RatesWithDate {
+    const data = cryptoCompareResponse.data
+
+
     return {
-        eth: 0,
-        btc: 0,
-        xrp: 0,
+        date: getFormattedDateTime(),
+        eth: data['ETH']['MXN'],
+        btc: data['BTC']['MXN'],
+        xrp: data['XRP']['MXN'],
     }
 }

@@ -23,7 +23,7 @@ describe('App', () => {
       jest.advanceTimersByTime(3000)
     })
 
-    const cryptoTitle = screen.getByText(/Crypto/i);
+    const cryptoTitle = screen.getByText(/Crypto comparator/i);
     expect(cryptoTitle).toBeInTheDocument();
     jest.useRealTimers()
   });
