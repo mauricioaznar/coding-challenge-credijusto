@@ -62,7 +62,7 @@ export default function WelcomeForm() {
                 <WelcomeFormInput
                     label={'Telephone'}
                     value={telephone}
-                    type={'telephone'}
+                    type={'tel'}
                     onChange={setTelephone}
                     id={'welcome-form-telephone'}
                 />

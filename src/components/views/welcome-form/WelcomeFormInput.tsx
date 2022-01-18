@@ -8,7 +8,7 @@ interface WelcomeFormInputProps {
     id: string;
     label: string;
     className?: string;
-    type?: 'text' | 'telephone' | 'email';
+    type?: 'text' | 'tel' | 'email';
 }
 
 export default function WelcomeFormInput (props: WelcomeFormInputProps) {

@@ -75,8 +75,8 @@ export default function CryptoRates (props: CryptoRatesProps) {
                                     <span>
                                         { r['date'] }
                                     </span>
-                                    <span className={'font-bold'}>
-                                        {  ' - ' + formatNumber(r[currentCrypto], 2) }
+                                    <span className={'font-bold ml-5'}>
+                                        {  formatNumber(r[currentCrypto], 2) }
                                     </span>
                                 </li>
                             )
