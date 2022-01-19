@@ -6,6 +6,7 @@ import '@testing-library/jest-dom';
 
 import {server} from "./test-utils/server";
 
+jest.setTimeout(20000)
 
 // Establish API mocking before all tests.
 beforeAll(() => server.listen());

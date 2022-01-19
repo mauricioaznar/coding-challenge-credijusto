@@ -1,7 +1,6 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import './CryptoComparator.css'
 import {useTypedSelector} from "../../hooks/redux-hooks/useTypedSelector";
-import {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import {parseCoinGecko} from "../../helpers/parse-coin-gecko";
 import {BASE_COIN_GECKO_URL, BASE_CRYPTO_COMPARE_URL} from "../../helpers/constants";
@@ -11,7 +10,7 @@ import {RatesWithDate} from "../../types/rates-with-date";
 import CryptoConverter from "./crypto-comparator/CryptoConverter";
 import {Rates} from "../../types/rates";
 import CryptoTimer from "./crypto-comparator/CryptoTimer";
-import useIsMounted from "../../hooks/dum/useIsMounted";
+import useIsMountedRef from "../../hooks/dum/useIsMountedRef";
 
 const COUNTDOWN = 15
 const buttons: (keyof Rates)[] = ['eth', 'btc', 'xrp']
@@ -24,20 +23,18 @@ export default function CryptoComparator() {
 
     const [selectedButton, setSelectedButton] = useState(buttons[0])
 
-
-    const isMounted = useIsMounted()
+    const [isMountedRef, setIsMountedRef] = useIsMountedRef()
     const [isError, setIsError] = useState(false)
     const isLoading = coinGeckoRates.length === 0
 
 
     const getCryptoRates = () => {
-
         Promise.all([
             axios.get(`${BASE_CRYPTO_COMPARE_URL}?fsyms=BTC%2CETH%2CXRP&tsyms=MXN`),
             axios.get(`${BASE_COIN_GECKO_URL}?vs_currency=mxn&ids=bitcoin%2Cethereum%2Cripple`)
         ])
             .then(response => {
-                if (isMounted) {
+                if (isMountedRef.current) {
                     const [
                         cryptoCompareResponse,
                         coinGeckoResponse
@@ -48,15 +45,22 @@ export default function CryptoComparator() {
                     const coinGeckoRate = parseCoinGecko(coinGeckoResponse)
                     setCoinGeckoRates([coinGeckoRate, ...coinGeckoRates])
                 }
-
             })
             .catch(_ => {
-                if (isMounted) {
+                if (isMountedRef.current) {
                     setIsError(true)
                 }
             })
     }
 
+    useEffect(() => {
+        getCryptoRates()
+        setIsMountedRef(true)
+        return () => {
+            setIsMountedRef(false)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
 
 

@@ -7,12 +7,6 @@ import CryptoTimer from "./CryptoTimer";
 describe('Crypto timer', () => {
     const defaultCallback = () => {};
 
-    it('renders name', async () => {
-        render(<CryptoTimer callback={defaultCallback} countdown={15}/>)
-        const title = await screen.findByText(/Crypto timer/i);
-        expect(title).toBeInTheDocument();
-    })
-
     it('renders initial countdown with 10', async () => {
         render(<CryptoTimer callback={defaultCallback} countdown={10}/>)
         const title = await screen.findByText(/10s/i);

@@ -1,9 +1,10 @@
-import {fireEvent, screen, waitFor, waitForElementToBeRemoved} from "@testing-library/react";
+import {act, fireEvent, screen, waitFor, waitForElementToBeRemoved} from "@testing-library/react";
 import React from "react";
 import CryptoComparator from "./CryptoComparator";
 import {render} from "../../test-utils/render";
 import {RootState} from "../../redux/reducers";
 import {coinGeckoException, server} from "../../test-utils/server";
+import {wait} from "@testing-library/user-event/dist/utils";
 
 const defaultStoreState: RootState = {
     auth: {
@@ -39,7 +40,7 @@ describe('Crypto comparator', function () {
         expect(listitems).toHaveLength(2)
     })
 
-    it('renders coin exchange names (eth, btc, xrp)', async () => {
+    it('renders coin exchange buttons (eth, btc, xrp)', async () => {
         render(<CryptoComparator/>, {initialState: defaultStoreState})
         await waitForElementToBeRemoved(() => screen.queryByText(/Loading/i))
         const links = await screen.findAllByRole('button')

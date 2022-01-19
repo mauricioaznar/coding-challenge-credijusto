@@ -4,11 +4,11 @@ import React, {useEffect, useState} from 'react'
 interface CryptoTimerProps {
     countdown: number;
     callback: () => void;
+
 }
 
 export default function CryptoTimer (props: CryptoTimerProps) {
     const { countdown, callback } = props
-
     const [count, setCount] = useState(countdown);
 
     useEffect(
@@ -24,12 +24,8 @@ export default function CryptoTimer (props: CryptoTimerProps) {
             // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [count])
 
-    return <div>
-        <h4>
-            Crypto timer
-        </h4>
-        <div>
-            Next update: {count}s
-        </div>
-    </div>
+
+    return <span>
+        Next update: {count}s
+    </span>
 }
