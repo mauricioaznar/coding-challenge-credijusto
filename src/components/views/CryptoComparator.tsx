@@ -12,20 +12,20 @@ import CryptoConverter from "./crypto-comparator/CryptoConverter";
 import {Rates} from "../../types/rates";
 
 const COUNTDOWN = 15
+const buttons: (keyof Rates)[] = ['eth', 'btc', 'xrp']
 
 export default function CryptoComparator() {
-    const isMounted = useRef(false);
-
     const {currentUser} = useTypedSelector((state) => state.auth);
+    const isMounted = useRef(false);
     const [count, setCount] = useState(COUNTDOWN);
 
     const [coinGeckoRates, setCoinGeckoRates] = useState<Array<RatesWithDate>>([])
     const [cryptoCompareRates, setCryptoCompareRates] = useState<Array<RatesWithDate>>([])
 
-    const buttons: (keyof Rates)[] = ['eth', 'btc', 'xrp']
     const [selectedButton, setSelectedButton] = useState(buttons[0])
 
     const [error, setError] = useState(false)
+    const isLoading = coinGeckoRates.length === 0
 
 
     const getCryptoRates = () => {
@@ -79,19 +79,11 @@ export default function CryptoComparator() {
         }, [count])
 
 
-    const isLoading = coinGeckoRates.length === 0
-
-
     return  error
-        ? <div className={'crypto-comparator_error m-5'}>
-                Something went wrong!
-            </div>
-        : isLoading
-            ? <div className={'crypto-comparator_loading m-5'}>Loading...</div>
+        ? <div className={'crypto-comparator_error m-5'}>Something went wrong!</div>
+        : isLoading ? <div className={'crypto-comparator_loading m-5'}>Loading...</div>
         : <div className={'crypto-comparator'}>
             <nav className={'crypto-comparator_nav d-flex align-center justify-space-around'}>
-
-
                 <div className={'d-flex column justify-center align-center'}>
                     <h2 className={'crypto-comparator_nav-title m-2'}>
                         Crypto comparator
