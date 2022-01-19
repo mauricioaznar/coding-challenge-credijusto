@@ -76,7 +76,3 @@ describe('Crypto comparator', function () {
 
 
 });
-
-describe(('timer'), () => {
-
-})
