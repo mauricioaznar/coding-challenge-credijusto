@@ -16,7 +16,6 @@ const buttons: (keyof Rates)[] = ['eth', 'btc', 'xrp']
 
 export default function CryptoComparator() {
     const {currentUser} = useTypedSelector((state) => state.auth);
-    const isMounted = useRef(false);
     const [count, setCount] = useState(COUNTDOWN);
 
     const [coinGeckoRates, setCoinGeckoRates] = useState<Array<RatesWithDate>>([])
@@ -24,7 +23,8 @@ export default function CryptoComparator() {
 
     const [selectedButton, setSelectedButton] = useState(buttons[0])
 
-    const [error, setError] = useState(false)
+    const isMounted = useRef(false);
+    const [isError, setIsError] = useState(false)
     const isLoading = coinGeckoRates.length === 0
 
 
@@ -50,7 +50,7 @@ export default function CryptoComparator() {
             })
             .catch(_ => {
                 if (isMounted.current) {
-                    setError(true)
+                    setIsError(true)
                 }
             })
     }
@@ -79,7 +79,7 @@ export default function CryptoComparator() {
         }, [count])
 
 
-    return  error
+    return  isError
         ? <div className={'crypto-comparator_error m-5'}>Something went wrong!</div>
         : isLoading ? <div className={'crypto-comparator_loading m-5'}>Loading...</div>
         : <div className={'crypto-comparator'}>

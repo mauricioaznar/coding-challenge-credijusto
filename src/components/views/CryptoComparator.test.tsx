@@ -3,8 +3,6 @@ import React from "react";
 import CryptoComparator from "./CryptoComparator";
 import {render} from "../../test-utils/render";
 import {RootState} from "../../redux/reducers";
-import {wait} from "@testing-library/user-event/dist/utils";
-import {act} from "react-dom/test-utils";
 import {coinGeckoException, server} from "../../test-utils/server";
 
 const defaultStoreState: RootState = {
