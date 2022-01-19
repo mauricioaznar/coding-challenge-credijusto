@@ -40,16 +40,6 @@ describe('Crypto comparator', function () {
     })
 
     it('renders 4 list items rates after 15 seconds', async () => {
-        const defaultStoreState: RootState = {
-            auth: {
-                currentUser: {
-                    firstName: "maria",
-                    lastName: "perez",
-                    email: "email@gmail.com",
-                    telephone: "23232323232"
-                }
-            }
-        }
         render(<CryptoComparator/>, {initialState: defaultStoreState})
         await waitForElementToBeRemoved(() => screen.queryByText(/Loading/i))
         await waitFor(async () => {
