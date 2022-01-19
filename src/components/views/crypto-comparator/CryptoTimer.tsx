@@ -1,14 +1,21 @@
 import React, {useEffect, useState} from 'react'
 
-const COUNTDOWN = 15
 
-export default function CryptoTimer () {
-    const [count, setCount] = useState(COUNTDOWN);
+interface CryptoTimerProps {
+    countdown: number;
+    callback: () => void;
+}
+
+export default function CryptoTimer (props: CryptoTimerProps) {
+    const { countdown, callback } = props
+
+    const [count, setCount] = useState(countdown);
 
     useEffect(
         () => {
             if (count <= 0) {
-                setCount(COUNTDOWN)
+                callback()
+                setCount(countdown)
             }
             const timeout = setTimeout(() => {
                 setCount(count - 1)

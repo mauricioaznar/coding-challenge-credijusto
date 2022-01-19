@@ -4,7 +4,6 @@ import WelcomeForm from "./components/views/WelcomeForm";
 import {Redirect, Route, Switch, useHistory} from "react-router-dom";
 import {useTypedSelector} from "./hooks/redux-hooks/useTypedSelector";
 import CryptoComparator from "./components/views/CryptoComparator";
-import CryptoTimer from "./components/views/crypto-comparator/CryptoTimer";
 
 function App() {
     const {currentUser} = useTypedSelector((state) => state.auth);
@@ -49,15 +48,6 @@ function App() {
                         />
                         : null
                 }
-
-                <Route
-                    path={'/timer'}
-                    render={() => {
-                        return <CryptoTimer />
-                    }}
-
-                    exact={true}
-                />
 
                 <Redirect
                     to={currentUser !== null ? '/cryptos' : '/welcome'}
