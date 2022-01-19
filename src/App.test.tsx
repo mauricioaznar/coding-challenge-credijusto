@@ -26,7 +26,6 @@ describe('App', () => {
 
     const welcomeMessage = screen.queryByText(/Welcome/i);
     expect(welcomeMessage).not.toBeInTheDocument();
-    jest.useRealTimers()
   });
 
   it('renders cryptos link when user is not defined', async () => {
@@ -39,7 +38,6 @@ describe('App', () => {
 
     const welcomeMessage = screen.getByText(/Welcome/i);
     expect(welcomeMessage).toBeInTheDocument();
-    jest.useRealTimers()
   });
 })
 

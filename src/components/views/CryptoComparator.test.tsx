@@ -1,10 +1,9 @@
-import {act, fireEvent, screen, waitFor, waitForElementToBeRemoved} from "@testing-library/react";
+import {fireEvent, screen, waitFor, waitForElementToBeRemoved} from "@testing-library/react";
 import React from "react";
 import CryptoComparator from "./CryptoComparator";
 import {render} from "../../test-utils/render";
 import {RootState} from "../../redux/reducers";
 import {coinGeckoException, server} from "../../test-utils/server";
-import {wait} from "@testing-library/user-event/dist/utils";
 
 const defaultStoreState: RootState = {
     auth: {
@@ -33,11 +32,30 @@ describe('Crypto comparator', function () {
         expect(firstNameElement).toBeInTheDocument()
     })
 
-    it('renders two list item (crypto compare & coin gecko) at the beginning of the render', async () => {
+    it('renders 2 list items rates (crypto compare rate & coin gecko rate) after loading', async () => {
         render(<CryptoComparator/>, {initialState: defaultStoreState})
         await waitForElementToBeRemoved(() => screen.queryByText(/Loading/i))
         const listitems = await screen.findAllByRole('listitem')
         expect(listitems).toHaveLength(2)
+    })
+
+    it('renders 4 list items rates after 15 seconds', async () => {
+        const defaultStoreState: RootState = {
+            auth: {
+                currentUser: {
+                    firstName: "maria",
+                    lastName: "perez",
+                    email: "email@gmail.com",
+                    telephone: "23232323232"
+                }
+            }
+        }
+        render(<CryptoComparator/>, {initialState: defaultStoreState})
+        await waitForElementToBeRemoved(() => screen.queryByText(/Loading/i))
+        await waitFor(async () => {
+            const listitems = await screen.findAllByRole('listitem')
+            expect(listitems).toHaveLength(4)
+        }, { timeout: 17000 })
     })
 
     it('renders coin exchange buttons (eth, btc, xrp)', async () => {
@@ -65,4 +83,10 @@ describe('Crypto comparator', function () {
         expect(errorElement).toBeInTheDocument()
     })
 
+
+
 });
+
+describe(('timer'), () => {
+
+})
